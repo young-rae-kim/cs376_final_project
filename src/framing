@@ -1,0 +1,62 @@
+import json
+import numpy as np
+import pandas as pd
+from os.path import basename
+from glob import glob
+from sklearn.model_selection import train_test_split
+
+#train_test_split(arrays, test_size, train_size, random_state, shuffle, stratify)
+
+        
+random.shuffle(X)
+
+X_train, X_test = train_test_split(X, test_size=0.4, random_state=123)
+
+random.shuffle(X_test)
+
+X_test, X_validation = train_test_split(X_test, test_size=0.5, random_state=123)
+'------------------------------------------------------------------------------------'
+
+plt.style.use("ggplot")
+
+train_soundscape_labels = pd.read_csv(
+    "C:\\Users\\ujubo\\birdclef-2021\\train_soundscape_labels.csv"
+)
+
+train_soundscape_labels["recording_id"] = train_soundscape_labels.row_id.apply(
+    lambda x: int(x.split("_")[0])
+)
+train_soundscape_labels["end_sec"] = train_soundscape_labels.row_id.apply(
+    lambda x: int(x.split("_")[2])
+)
+train_soundscape_labels["bird_call"] = train_soundscape_labels.birds.apply(
+    lambda x: False if x == "nocall" else True
+)
+train_soundscape_labels["birds"] = train_soundscape_labels.birds.apply(
+    lambda x: "" if x == "nocall" else x
+)
+train_soundscape_labels["birds"] = train_soundscape_labels.birds.apply(
+    lambda x: json.dumps(split(x, " "))
+)
+train_soundscape_labels["bird_count"] = train_soundscape_labels.birds.apply(
+    lambda x: len(eval(x))
+)
+train_soundscape_labels["birds"] = train_soundscape_labels.birds.apply(
+    lambda x: eval(x)
+)
+train_soundscape_labels_org = train_soundscape_labels.copy()
+
+df = train_soundscape_labels_org.copy()
+
+df["key"] = df.recording_id.astype(str) + "_" + df.site
+df["file_glob"] = df.key + "_*.ogg"
+
+siteaudio2filename = {}
+
+for file_glob in df.file_glob.unique():
+    audio_path = glob(f"C:\\Users\\ujubo\\birdclef-2021\\train_soundscapes/{file_glob}")[0]
+    siteaudio2filename[file_glob[:-6]] = basename(audio_path)
+
+train_soundscape_labels = df.copy()
+train_soundscape_labels.to_csv("train_soundscape_labels_v2.csv", index=False)
+pd.read_csv("train_soundscape_labels_v2.csv")
