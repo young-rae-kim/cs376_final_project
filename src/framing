@@ -4,57 +4,83 @@ import pandas as pd
 from os.path import basename
 from glob import glob
 from sklearn.model_selection import train_test_split
+import random
 
 #train_test_split(arrays, test_size, train_size, random_state, shuffle, stratify)
 
-        
-random.shuffle(X)
 
-X_train, X_test = train_test_split(X, test_size=0.4, random_state=123)
-
-random.shuffle(X_test)
-
-X_test, X_validation = train_test_split(X_test, test_size=0.5, random_state=123)
 '------------------------------------------------------------------------------------'
 
-train_soundscape_labels = pd.read_csv(
-    "C:\\Users\\ujubo\\birdclef-2021\\train_soundscape_labels.csv"
-)
+mydir="C:\\Users\\ujubo\\bc_2021\\"
+fname = "train_metadata.csv"
 
-train_soundscape_labels["recording_id"] = train_soundscape_labels.row_id.apply(
-    lambda x: int(x.split("_")[0])
-)
-train_soundscape_labels["end_sec"] = train_soundscape_labels.row_id.apply(
-    lambda x: int(x.split("_")[2])
-)
-train_soundscape_labels["bird_call"] = train_soundscape_labels.birds.apply(
-    lambda x: False if x == "nocall" else True
-)
-train_soundscape_labels["birds"] = train_soundscape_labels.birds.apply(
-    lambda x: "" if x == "nocall" else x
-)
-train_soundscape_labels["birds"] = train_soundscape_labels.birds.apply(
-    lambda x: json.dumps(split(x, " "))
-)
-train_soundscape_labels["bird_count"] = train_soundscape_labels.birds.apply(
-    lambda x: len(eval(x))
-)
-train_soundscape_labels["birds"] = train_soundscape_labels.birds.apply(
-    lambda x: eval(x)
-)
-train_soundscape_labels_org = train_soundscape_labels.copy()
 
-df = train_soundscape_labels_org.copy()
+class Load_Data:
+    def __init__(self, directory, csvname):
+        self.directory = directory
+        self.csvname = csvname
+        self.doc = ()
+        self.trainset = list()
+        self.testset = list()
+        self.validationset = list()
+        
+    def dividing_npy(self):
+        #csv파일 읽고 train test valid set나누기
+        
+        train_metadata=pd.read_csv(
+            self.directory + self.csvname
+        )
+        train_metadata["primary_label"] = train_metadata.primary_label
+        train_metadata["secondary_label"] = train_metadata.secondary_labels
+        train_metadata["scientific_name"] = train_metadata.scientific_name
+        train_metadata["common_name"] = train_metadata.common_name
+        train_metadata["filename"] = train_metadata.filename
+        
+        tm = train_metadata.copy()
+        tm["imagepath"] = tm.filename.apply(
+            lambda x: self.directory + "image\\"
+        )
+        tm["npypath"] = tm.imagepath + tm.filename + ".npy"
+        
+        train_index_set = list()
+        test_index_set = list()
+        validation_index_set = list()
+        total_num = 0
+        for species in tm.primary_label.unique():
+            num_each_species = 0
+            while total_num < len(tm.npypath) and species == tm.primary_label[total_num] :
+                total_num += 1
+                num_each_species += 1
+            train_index_set.extend(dividing_files(num_each_species, total_num - num_each_species)[0])
+            test_index_set.extend(dividing_files(num_each_species, total_num - num_each_species)[1])
+            validation_index_set.extend(dividing_files(num_each_species, total_num - num_each_species)[2])
+            
+        train_index_set.sort()
+        test_index_set.sort()
+        validation_index_set.sort()
+        
+        
+    def showcsv(self):
+        print(self.doc)
+        
+    def loadfiles()
+        #npy 파일 로드
+        
+        
+def dividing_files(num_of_data, first_index):
+    #dividing_npy 를 위한 메소드
+    data_index = list(i + first_index for i in range(num_of_data))
+        
+    random.shuffle(data_index)
 
-df["key"] = df.recording_id.astype(str) + "_" + df.site
-df["file_glob"] = df.key + "_*.ogg"
+    train_index, test_index = train_test_split(data_index, test_size=0.4, random_state=123)
 
-siteaudio2filename = {}
+    random.shuffle(test_index)
 
-for file_glob in df.file_glob.unique():
-    audio_path = glob(f"C:\\Users\\ujubo\\birdclef-2021\\train_soundscapes/{file_glob}")[0]
-    siteaudio2filename[file_glob[:-6]] = basename(audio_path)
+    test_index, validation_index = train_test_split(test_index, test_size=0.5, random_state=123)
+        
+    return train_index, test_index, validation_index
 
-train_soundscape_labels = df.copy()
-train_soundscape_labels.to_csv("train_soundscape_labels_v2.csv", index=False)
-pd.read_csv("train_soundscape_labels_v2.csv")
+        
+test = Load_Data(mydir, fname)
+test.read_csv()
