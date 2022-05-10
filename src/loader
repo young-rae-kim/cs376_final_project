@@ -81,6 +81,4 @@ def dividing_files(num_of_data, first_index):
         
     return train_index, test_index, validation_index
 
-        
-test = Load_Data(mydir, fname)
-test.read_csv()
+ 
