@@ -1,5 +1,5 @@
 # Birdcall Classifier using Mel-spectrogram and CNN
-### CS376 Final Project Team 30
+### CS376 Final Project - Team 30
 #### 20170131 Youngrae Kim, 20180767 SeongHyeok Kim, 20150837 ByeongHyeok Kim
 
   In biology, identifying bird species by sound is an important problem. There are some endangered bird species which biologists may not be able to capture and perform experiments, which makes it hard to collect experimental data. We thought if we construct a model that can predict which bird species we heard singing, we can aid biologists’ problems. Therefore, we would develop a machine learning model that can identify bird species with auditory data.
