@@ -12,7 +12,7 @@
 ## 2. Models
 <img src="/model.jpg" alt="model"></img><br/>
 For CNN architectures deployed for each models, we use existing state-of-the-art CNN models as belows:
-* **ResNet50** : https://arxiv.org/abs/1512.03385
+* **ResNet50** : https://arxiv.org/abs/1512.03385 - *Selected based on experiments!*
 * **GoogLeNet** : https://arxiv.org/abs/1409.4842
 * **DenseNet** : https://arxiv.org/abs/1608.06993
 
