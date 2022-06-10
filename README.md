@@ -11,10 +11,17 @@
 
 ## 2. Models
 <img src="/model.jpg" alt="model"></img><br/>
-For CNN architectures deployed for each models, we use existing state-of-the-art CNN models as belows:
-* **ResNet50** : https://arxiv.org/abs/1512.03385 - *Selected based on experiments!*
-* **GoogLeNet** : https://arxiv.org/abs/1409.4842
-* **DenseNet** : https://arxiv.org/abs/1608.06993
+* For CNN architectures deployed for each models, we use existing state-of-the-art CNN models as belows:
+  * **ResNet50** : https://arxiv.org/abs/1512.03385 - *Selected based on experiments!*
+  * **GoogLeNet** : https://arxiv.org/abs/1409.4842
+  * **DenseNet** : https://arxiv.org/abs/1608.06993
+* Two different models are deployed to detect bird species in given audio segment.
+  * Model 1 (No-call Detector)
+    *  indicates whether the audio has valid bird sound
+    *  https://github.com/young-rae-kim/cs376_final_project/blob/main/nocall_detector.ipynb
+  * Model 2 (Bird Species Classifier)
+    *  indicates which bird species is likely to be included in the given audio
+    *  https://github.com/young-rae-kim/cs376_final_project/blob/main/bird_species_classifier.ipynb
 
 ## 3. Train & Result
 <img src="/result.jpg" alt="model"></img><br/>
